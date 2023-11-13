@@ -1,5 +1,7 @@
 #pragma once
 
+#include "./typeHandler.h"
+
 /**
  * @brief
  *     링크 리스트 기반의 자료구조에 대한 반복자 클래스다.
@@ -19,7 +21,7 @@ class Iterator {
         explicit operator bool() const;
 
         decltype(auto) operator*();
-        decltype(auto) operator*() const;
+        // decltype(auto) operator*() const;    const 추가하는 방법?
 
         Iterator<T>& operator++();      // prefix
         Iterator<T>  operator++(int);   // postfix
@@ -69,12 +71,6 @@ template <typename T> Iterator<T>::operator bool() const { return (mTarget != nu
  * @return decltype(auto) : 노드 객체가 비어있으면 nullptr 반환. 비어있지 않으면 데이터 값 반환
  */
 template <typename T> decltype(auto) Iterator<T>::operator*() {
-    if (*this)
-        return mTarget->data;
-
-    return nullptr;
-}
-template <typename T> decltype(auto) Iterator<T>::operator*() const {
     if (*this)
         return mTarget->data;
 
