@@ -28,7 +28,8 @@ class String {
         String& operator+=(const char& ch);
         String& operator*=(const uint32& multiplier);
 
-        char& operator[](const uint32& idx) const;
+        char& operator[](const uint32& idx);
+        const char& operator[](const uint32& idx) const;
 
         bool operator==(const String& other) const;
         bool operator!=(const String& other) const;
@@ -124,6 +125,18 @@ String& String::operator+=(const char& ch) {
 
 /**
  * @brief
+ *     문자열에서 idx 값에 해당하는 인덱스의 문자를 반환한다.
+ *     이 때, 경계 검사는 하지 않는다.
+ *
+ * @param idx 인덱스 값
+ *
+ * @return char& : idx 값에 해당하는 문자의 참조
+ */
+      char& String::operator[](const uint32& idx)       { return mStr[idx]; }
+const char& String::operator[](const uint32& idx) const { return mStr[idx]; }
+
+/**
+ * @brief
  *     다른 객체의 문자열을 복사한다.
  *     복사 생성자, 복사 대입 연산자에서 사용
  *
@@ -209,12 +222,11 @@ String::operator bool() const { return !isEmpty(); }
  * @return String : 변경된 문자열
  */
 String String::toLower() const {
-    String result(mCapacity);
+    String result = *this;
 
-    for (uint32 i = 0; i < mLength; ++i) {
-        if ('A' <= mStr[i] && mStr[i] <= 'Z') {
-            
-        }
+    for (uint32 i = 0; i < result.mLength; ++i) {
+        if ('A' <= result.mStr[i] && result.mStr[i] <= 'Z')
+            result.mStr[i] += 0x20;
     }
 
     return result;
@@ -226,12 +238,11 @@ String String::toLower() const {
  * @return String : 변경된 문자열
  */
 String String::toUpper() const {
-    String result(mCapacity);
+    String result = *this;
 
     for (uint32 i = 0; i < mLength; ++i) {
-        if ('a' <= mStr[i] && mStr[i] <= 'z') {
-
-        }
+        if ('a' <= result.mStr[i] && result.mStr[i] <= 'z')
+            result.mStr[i] -= 0x20;
     }
 
     return result;
@@ -256,7 +267,7 @@ String String::slice(const uint32& from, const uint32& to) const {
         return result;
     }
 
-    return String("Invalid slice interval");
+    return String();
 }
 
 void String::clear() {
