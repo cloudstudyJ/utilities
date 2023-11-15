@@ -8,5 +8,8 @@ namespace typeHandlingBase {
 
 template <typename T> using removeReference = typename typeHandlingBase::removeReference<T>::type;
 
+template <typename, typename> inline constexpr bool isSame       = false;
+template <typename T>         inline constexpr bool isSame<T, T> = true;
+
 template <typename T>
 [[nodiscard]] constexpr decltype(auto) move(T&& _val) noexcept { return static_cast<removeReference<T>&&>(_val); }
